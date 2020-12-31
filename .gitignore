@@ -132,3 +132,9 @@ dmypy.json
 # astrobot
 pml/
 simulations/
+
+# pytorch
+cub-1.10.0/
+*.tar.gz
+*.obj
+*.mtl
