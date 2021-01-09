@@ -22,23 +22,23 @@ coordinates. This is why two transposes are needed during matrix transformations
 
 .. code-block:: python
 
-mtx = np.array(
-    [[-6.,  6.,  6., -6.],
-     [ 0.,  0.,  0.,  0.],
-     [-3., -3.,  3.,  3.]])
+    mtx = np.array(
+        [[-6.,  6.,  6., -6.],
+        [ 0.,  0.,  0.,  0.],
+        [-3., -3.,  3.,  3.]])
 
->> m[:, 0]
-[-6, 0, -3]
+    >> m[:, 0]
+    [-6, 0, -3]
 
->> m[:, 0:1]
-[[-6.],
- [ 0.],
- [-3.]])
+    >> m[:, 0:1]
+    [[-6.],
+    [ 0.],
+    [-3.]])
 
 """
 
 
-def vecmtx(pntmtx):
+def vecmtx(pntmtx: np.ndarray) -> np.ndarray:
     """Compute a matrix of non-unit direction vectors associated with pntmtx.
 
     Can be considered the directed edges of from an array of vertices.
@@ -69,7 +69,7 @@ def vecmtx(pntmtx):
     return (vecmtx[:, 1, :] - vecmtx[:, 0, :]).T
 
 
-def unit_vecmtx(vecmtx):
+def unit_vecmtx(vecmtx: np.ndarray) -> np.ndarray:
     """Unitize vc vectors in vecmtx.
 
     This is a somewhat contrived way to use matrix transformation to normalize an array
@@ -84,26 +84,29 @@ def unit_vecmtx(vecmtx):
     return np.matmul(vecmtx, divmtx)
 
 
-def corr(vec1, vec2):
+def corr(vec1: np.ndarray, vec2: np.ndarray) -> float:
     """Correlation (between 0 and 1) for two vectors.
 
     Vectors are unitized.
     """
-    return np.dot(vec1 / np.linalg.norm(vec2), vec2 / np.linalg.norm(vec2))
+    # matmul(V^T,  V) == dot(V, V)
+    return np.matmul(vec1 / np.linalg.norm(vec2).T, vec2 / np.linalg.norm(vec2))
 
 
-def is_parallel(vec1, vec2, tol=DEFAULT_TOLERANCE):
+def is_parallel(vec1: np.ndarray, vec2: np.ndarray, tol: float = DEFAULT_TOLERANCE
+                ) -> bool:
     """Boolean classifying if two vectors are parrallel."""
     return np.abs(1.0 - corr(vec1, vec2)) < tol
 
 
-def ortho_basis_mtx(vecmtx, calc_only_normal=False):
+def ortho_basis_mtx(vecmtx: np.ndarray, calc_only_normal: bool = False) -> np.ndarray:
     """Compute the orthogonal change of basis matrix for the surface defined by vecmtx.
 
     It consists of an array of column, unit vectors of the x, y and normal vector of the
     vecmtx. This matrix transforms point coordinates in the basis space back to the
-    standard basis space. Use the inv_ortho_basis_mtx function to get a transformation
-    matrix to transform from standard basis to the basis of the surface.
+    standard basis space. Use the inverse of this matrix (i.e.
+    `np.linalg.pinv(ortho_basis_mtx)`) to get a transformation matrix to transform from
+    standard basis to the basis of the surface with:
 
     Args:
         vecmtx: Array of vectors.
@@ -148,24 +151,7 @@ def ortho_basis_mtx(vecmtx, calc_only_normal=False):
     return unit_vecmtx(np.array([xvec, yvec, nvec]).T)
 
 
-def inv_ortho_basis_mtx(ortho_basis_mtx):
-    """Inverse change of basis matrix.
-
-    This matrix transforms point coordinates in the standard basis to the
-    basis space defined in the ortho_basis_mtx.
-
-    Args:
-        ortho_basis_mtx: orthogonal basis matrix, calculated from ortho_basis_mtx
-            function.
-
-    Returns:
-        Inverse change of basis matrix.
-    """
-
-    return np.linalg.pinv(ortho_basis_mtx)
-
-
-def normal_vec(vecmtx):
+def normal_vec(vecmtx: np.ndarray) -> np.ndarray:
     """Compute the (non-unit) normal vector associated with a (non-unit) vecmtx.
 
     Normal is computed by traversing vecs until it finds non-collinear vecs.
@@ -180,4 +166,18 @@ def normal_vec(vecmtx):
     """
     return ortho_basis_mtx(vecmtx, calc_only_normal=True)
 
+
+def cam_coord_mtx() -> np.ndarray:
+    """matrix to transform world coordinates to camera coordinates.
+
+    For camera coordinate systems the x-axis stays the same, but the y-axis rotates to
+    the z-axis, and the z-axis is rotated to the negative y-axis. Thus the negative
+    z-axis is the "front" of an object.
+    """
+
+    return np.array(
+        [[ 1.,  0.,  0.],
+         [ 0.,  0., -1.],
+         [ 0.,  1.,  0.]]
+    )
 

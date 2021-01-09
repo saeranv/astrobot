@@ -62,13 +62,19 @@ def test_ortho_basis_mtx():
     assert np.allclose(basis_mtx, chk_mtx, atol=1e-10)
 
 
-def test_inv_ortho_basis_mtx():
-    """Test inv ortho basis vectors."""
+def test_change_of_basis():
+    """Testing change of basis."""
 
-    basis_mtx = mtx_util.ortho_basis_mtx(mtx_util.vecmtx(PNTMTX_XZ))
-    inv_basis_mtx = mtx_util.inv_ortho_basis_mtx(basis_mtx)
-    chk_mtx = np.eye(3)  # identity matrix
+    poly = np.array(
+        [[-6.,  6.,  -4., -6.],
+        [ 10.,  10.,   10.,  10.],
+        [-3., -3.,  15.,  3.]])
 
-    idmtx = np.matmul(basis_mtx, inv_basis_mtx)
+    basis_mtx = mtx_util.ortho_basis_mtx(mtx_util.vecmtx(poly))
+    inv_basis_mtx = np.linalg.pinv(basis_mtx)
 
-    assert np.allclose(idmtx, chk_mtx, atol=1e-10)
+    # change to poly basis
+    polyb = np.matmul(inv_basis_mtx, poly)
+
+    assert np.allclose(poly, np.matmul(basis_mtx, polyb), atol=1e-10)
+

@@ -1,9 +1,9 @@
 from functools import reduce
 import numpy as np
 
+
 class R(object):
-    """
-    Class to structures hierarchical vector subspaces as dataframes.
+    """Class to structures hierarchical vector subspaces as dataframes.
 
     R is a reference to the set of ordered n-tuples of real numbers in n-space denoted R^n.
 
@@ -24,7 +24,9 @@ class R(object):
         modcols = self.mod.columns.tolist() if self._mod is not None else []
         spccols = self.spc.columns.tolist() if self._spc is not None else []
         srfcols = self.srf.columns.tolist() if self._srf is not None else []
-        return "mod: {}\nspc: {}\nsrf: {}".format(modcols, spccols, srfcols)
+        wincols = self.win.columns.tolist() if self._win is not None else []
+        return "mod: {}\nspc: {}\nsrf: {}\nwin: {}".format(
+            modcols, spccols, srfcols, wincols)
 
     @property
     def mod(self):
@@ -44,11 +46,8 @@ class R(object):
 
     @spc.setter
     def spc(self, spc):
-        if self._spc is None:
-            spc['idx'] = spc.index
-            self._spc = spc.set_index('idx')
-        else:
-            raise Exception('spc is already set.')
+        spc['idx'] = spc.index
+        self._spc = spc.set_index('idx')
 
     @property
     def srf(self):
@@ -56,4 +55,14 @@ class R(object):
 
     @srf.setter
     def srf(self, srf):
-        self._srf = srf
+        srf['idx'] = srf.index
+        self._srf = srf.set_index('idx')
+
+    @property
+    def win(self):
+        return self._win
+
+    @win.setter
+    def win(self, win):
+        win['idx'] = win.index
+        self._win = win.set_index('idx')

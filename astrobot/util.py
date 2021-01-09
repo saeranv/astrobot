@@ -14,12 +14,14 @@ pd.set_option('precision', 2)
 np.set_printoptions(precision=2)
 """
 import os
-import time
-
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
 from pprint import pprint
+
+# path to this package from experiments folder
+PACKAGE_FPATH_FOR_EXPERIMENTS = os.path.abspath(os.path.join(os.getcwd(), '..', '..'))
+
+# path to epw from experiments folder
+EPW_FPATH_FOR_EXPERIMENTS = os.path.abspath(
+    os.path.join('..', '..', 'resources', 'epw', 'philadelphia', 'philadelphia.epw'))
 
 
 def pp(x, *args):
@@ -27,7 +29,7 @@ def pp(x, *args):
 
 
 def fd(module, key=None):
-    """ To efficiently search modules in osm"""
+    """ To efficiently search modules."""
     def hfd(m, k): return k.lower() in m.lower()
     if key is None:
         return [m for m in dir(module)][::-1]
