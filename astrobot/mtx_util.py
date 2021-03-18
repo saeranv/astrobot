@@ -87,9 +87,15 @@ def unit_vecmtx(vecmtx: np.ndarray) -> np.ndarray:
 def corr(vec1: np.ndarray, vec2: np.ndarray) -> float:
     """Correlation (between 0 and 1) for two vectors.
 
-    Vectors are unitized.
+    Args:
+        vec1: First vector as numpy array. Does not need to be unitized.
+        vec2: Second vector as numpy array. Does not need to be unitized.
+
+    Return:
+        Float between 0 and 1 representing correlation between vectors.
     """
-    # matmul(V^T,  V) == dot(V, V)
+    # interpretation from G. Strang: dot(V, V) is better thought of as a linear
+    # transformation of two vectors to 1 dimensional space: matmul(V^T,  V).
     return np.matmul(vec1 / np.linalg.norm(vec2).T, vec2 / np.linalg.norm(vec2))
 
 

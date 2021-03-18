@@ -55,7 +55,7 @@ def face3ds_to_room2ds(face3ds, face3d_idxs, mod_idx):
 
 
 def set_room2d_wwr(room, wwr_theta, wwr):
-    """Set wwr to room2d based on reference angle of wall."""
+    """Assign window ratio to room2ds based on reference angle of wall."""
 
     wwr_theta = geom_util.to_lb_theta(wwr_theta)
     seg_thetas = room.segment_orientations()
@@ -72,7 +72,7 @@ def set_room2d_wwr(room, wwr_theta, wwr):
 
 
 def set_building_wwr(building, wwr, wwr_theta):
-    """Assign window ratio to building."""
+    """Assign window ratio to building consisting of multiple stories."""
 
     for building_story in building:
         for room in building_story.room_2ds:
@@ -80,6 +80,7 @@ def set_building_wwr(building, wwr, wwr_theta):
 
 
 def set_model_wwr(model, wwrs, thetas):
+    """Assign window ratio to model consisting of multiple buildings."""
     [set_building_wwr(bld, wwrs, thetas) for bld in model.buildings]
 
 

@@ -3,6 +3,7 @@ from matplotlib import cm as mpl_cm
 from matplotlib import colors as mpl_colors
 
 from shapely import geometry as geomsh
+
 from typing import Optional, List
 
 # torch imports
@@ -16,25 +17,21 @@ from pytorch3d.renderer import FoVPerspectiveCameras, look_at_view_transform, \
 def get_render_device() -> str:
     # Setup
     if torch.cuda.is_available():
-        #device = torch.device("cuda:0")
-        #torch.cuda.set_device(device)
         device = 'cuda:0'
     else:
-        #device = torch.device("cpu")
         device = 'cpu'
 
     return device
-
 
 def trimesh_to_polysh(trimesh):
     """Convert mesh to shapely geometries for visualization."""
     return [geomsh.Polygon(tri) for tri in trimesh.triangles]
 
 
-def camera_(pytmeshes: Meshes, dist: float = 80, elev: float = 0, azim: float = 0,
-            fov: float = 30, device: Optional[str] = None,
-            cam_pt: Optional[List[float]] = None,
-            light_pt: Optional[List[float]] = None) -> torch.Tensor:
+def simple_cam(pytmeshes: Meshes, dist: float = 80, elev: float = 0, azim: float = 0,
+               fov: float = 30, device: Optional[str] = None,
+               cam_pt: Optional[List[float]] = None,
+               light_pt: Optional[List[float]] = None) -> torch.Tensor:
 
     """
     Wrapper visualization function to generate simple image from auto-generated camera.
@@ -90,3 +87,4 @@ def camera_(pytmeshes: Meshes, dist: float = 80, elev: float = 0, azim: float = 
     images = renderer(pytmeshes)
 
     return images
+
