@@ -16,8 +16,12 @@ np.set_printoptions(precision=2)
 import os
 from pprint import pprint
 
+# Package to astrobot/ root folder
+ROOT_DIR = os.path.abspath(os.path.join(__file__, '..', '..'))
+
 # path to this package from experiments folder
-PACKAGE_FPATH_FOR_EXPERIMENTS = os.path.abspath(os.path.join(os.getcwd(), '..', '..'))
+PACKAGE_FPATH_FOR_EXPERIMENTS = os.path.abspath(
+    os.path.join(os.getcwd(), '..', '..'))
 
 # path to epw from experiments folder
 EPW_FPATH_FOR_EXPERIMENTS = os.path.abspath(

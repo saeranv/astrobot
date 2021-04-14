@@ -1,0 +1,25 @@
+
+Note: For each variable used as input for the end-use models, the model it appears in are indicated as follows:
+SPH: Space heating
+AHUHEAT: Air handlers for heating 
+COL: Air conditioning
+AHUCOL: Air handlers for cooling
+EVAPCOL: Evaporative coolers
+FANS: Fans
+DHUM: Dehumidifiers
+HUM: Humidifiers
+WTH: Water heating
+LGT: Lighting
+RFG: Refigerators
+FRZ: Freezers
+DWH: Dishwashers
+COK: Stoves, cooktops, and ovens
+MICRO: Microwaves
+TVREL: Televisions and related
+CW: Clothers washers
+CDR: Clothes dryers
+PLPMP: Pool pumps
+PLHEAT: Pool heaters
+HTBPMP: Hot tub pumps
+HTBHEAT: Hot tub heaters
+NEC: Not elsewhere classified
