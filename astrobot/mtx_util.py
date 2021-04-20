@@ -125,21 +125,21 @@ def ortho_basis_mtx(vecmtx: np.ndarray, calc_only_normal: bool = False) -> np.nd
             constitutes the change of basis matrix.
     """
 
-    _is_parallel = lambda d: np.abs(1.0 - d) < DEFAULT_TOLERANCE
+    def _is_parallel(d): return np.abs(1.0 - d) < DEFAULT_TOLERANCE
 
     vec_idx = 0
-    d = corr(vecmtx[:, vec_idx], vecmtx[:, vec_idx+1])
+    d = corr(vecmtx[:, vec_idx], vecmtx[:, vec_idx + 1])
 
     # find non-collinear vecs
     while _is_parallel(d) and vec_idx < vecmtx.shape[0]:
         vec_idx += 1
-        d = corr(vecmtx[:, vec_idx], vecmtx[:, vec_idx+1])
+        d = corr(vecmtx[:, vec_idx], vecmtx[:, vec_idx + 1])
 
     # Note that the ccw order of the polygon edges results in a
     # +z-axis normal for a xy-plane, and a -y-axis normal for a
     # xz-plane. This corresponds with this module's assumptions
     # of outward facing normals.
-    nvec = np.cross(vecmtx[:, vec_idx], vecmtx[:, vec_idx+1])
+    nvec = np.cross(vecmtx[:, vec_idx], vecmtx[:, vec_idx + 1])
 
     if calc_only_normal:
         return nvec
@@ -149,7 +149,7 @@ def ortho_basis_mtx(vecmtx: np.ndarray, calc_only_normal: bool = False) -> np.nd
     # between the xvec and normal.
     xvec = vecmtx[:, vec_idx]
     if np.abs(d) < DEFAULT_TOLERANCE:
-        yvec = vecmtx[:, vec_idx+1]
+        yvec = vecmtx[:, vec_idx + 1]
     else:
         yvec = np.cross(nvec, xvec)
 
@@ -182,8 +182,23 @@ def cam_coord_mtx() -> np.ndarray:
     """
 
     return np.array(
-        [[ 1.,  0.,  0.],
-         [ 0.,  0., -1.],
-         [ 0.,  1.,  0.]]
+        [[1., 0., 0.],
+         [0., 0., -1.],
+         [0., 1., 0.]]
     )
 
+
+def contiguous_ones_idx(bin_arr: np.ndarray) -> np.ndarray:
+    """Find indices of contiguous (repeated) ones in binary array.
+
+    Given binary array (0s, 1s), returns (start, end) indices of
+    repeated blocks of ones:
+
+    bin_arr = np.array([1, 0, 0, 1, 0, 0, 1, 1])
+    contiguous_ones_idx(bin_arr) -> [[0, 1] [3, 4] [6, 8]]
+    """
+    bin_arr = (bin_arr / bin_arr.max()).astype(np.uint8)
+    bin_arr = np.concatenate(([0], bin_arr, [0]))
+    diff = np.abs(np.diff(bin_arr))
+    zero_idx = np.where(diff == 1)[0].reshape(-1, 2)
+    return zero_idx
