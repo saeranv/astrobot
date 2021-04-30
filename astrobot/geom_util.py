@@ -1,3 +1,4 @@
+from typing import List, Union, Tuple, Optional
 import os
 
 import numpy as np
@@ -9,7 +10,6 @@ import ladybug_geometry.geometry2d as geom2
 Face3D = geom3.face.Face3D
 Point3D = geom3.pointvector.Point3D
 
-from typing import List, Union, Tuple, Optional
 
 def to_lb_theta(theta: float) -> float:
     """Converts orientation in radians to ladybug's orientation conventions.
@@ -41,9 +41,9 @@ def _rect_coords(aspect_ratio, dim):
 
     ew, ns = aspect_ratio * dim, dim
     flr_verts = np.array([
-        [-ew,  ew, ew, -ew],
-        [-ns, -ns, ns,  ns],
-        [  0,   0,  0,   0]])
+        [-ew, ew, ew, -ew],
+        [-ns, -ns, ns, ns],
+        [0, 0, 0, 0]])
 
     return flr_verts / 2.0
 
@@ -58,7 +58,8 @@ def face_from_params(theta: float, area: float = 72, dim: float = 12,
 
     # Make floor
     flr_verts = _rect_coords(aspect_ratio, dim)
-    flr_verts = [geom3.pointvector.Point3D(*flr_vert) for flr_vert in flr_verts.T]
+    flr_verts = [geom3.pointvector.Point3D(
+        *flr_vert) for flr_vert in flr_verts.T]
     flr = Face3D(flr_verts, plane).rotate(zvec, theta, origin)
 
     # Transformations
@@ -78,8 +79,43 @@ def polyskel_from_face(face: Face3D) -> List[Face3D]:
 
     #core, perimlst, _ = polyskel.sub_polygons(poly2d, 5)
     #polylst = perimlst + [core]
-    #zones = [[list(arr) + [0] for arr in poly.to_array()]
+    # zones = [[list(arr) + [0] for arr in poly.to_array()]
     #         for poly in polylst]
     sub_polys = [face.duplicate()]
 
     return sub_polys
+
+
+def viz_poly_sh_arr(poly_sh_arr, a=None, scale=1, **kwargs):
+    """Plot shapely polygons"""
+    if a is None:
+        _, a = plt.subplots()
+    for poly_sh in poly_sh_arr:
+        if poly_sh.exterior:
+            xx, yy = poly_sh.exterior.xy
+            xx, yy = np.array(xx), np.array(yy)
+            a.plot(xx * scale, yy * scale, **kwargs)
+    a.axis('equal')
+    return a
+
+
+def to_poly_sh(xy_arr):
+    """Shapely polygon from list of two arrays of x, y coordinates.
+
+        Args:
+            xy_arr: [x_arr, y_arr]
+    Example:
+        to_poly_sh(to_poly_np(poly_sh))
+        to_poly_np(to_poly_sh(poly_np))
+    """
+    return geom.Polygon([(x, y) for x, y in zip(*xy_arr)])
+
+
+def to_poly_np(poly_sh):
+    """Two arrays of x, y coordinates from shapely polygon.
+
+    Example:
+        to_poly_sh(to_poly_np(poly_sh))
+        to_poly_np(to_poly_sh(poly_np))
+    """
+    return np.array(poly_sh.exterior.xy)

@@ -26,7 +26,8 @@ def program_space_types(program_type="Office"):
 
 
 def program_space_types_blend(space_types, weights, space_type_name='blended'):
-    space_types = [lib.programtypes.program_type_by_identifier(st) for st in space_types]
+    space_types = [lib.programtypes.program_type_by_identifier(
+        st) for st in space_types]
     return lib.programtypes.ProgramType.average(space_type_name, space_types, weights)
 
 
@@ -54,19 +55,24 @@ def face3ds_to_room2ds(face3ds, face3d_idxs, mod_idx):
     return room2ds
 
 
-def set_room2d_wwr(room, wwr_theta, wwr):
+def set_room2d_wwr(room, wwr, wwr_theta=None):
     """Assign window ratio to room2ds based on reference angle of wall."""
 
-    wwr_theta = geom_util.to_lb_theta(wwr_theta)
-    seg_thetas = room.segment_orientations()
     win_params = list(room.window_parameters)
     bcs = room.boundary_conditions
+    seg_thetas = room.segment_orientations()
 
-    for i in range(len(seg_thetas)):
-        is_out_wwr_theta = \
-            (np.abs(seg_thetas[i] - wwr_theta) < 1e-10) and (bcs[i].name == 'Outdoors')
-        if is_out_wwr_theta:
-            win_params[i] = windowparameter.SimpleWindowRatio(wwr)
+    wwr_theta = geom_util.to_lb_theta(wwr_theta)
+    for i, seg_theta in enumerate(seg_thetas):
+        if bcs[i].name != 'Outdoors':
+            continue
+
+        if wwr_theta:
+            is_out_wwr_theta = (np.abs(seg_theta - wwr_theta) < 1e-10)
+            if not is_out_wwr_theta:
+                continue
+
+        win_params[i] = windowparameter.SimpleWindowRatio(wwr)
 
     room.window_parameters = win_params
 
@@ -238,7 +244,6 @@ def perim_srfs_mask(srfs):
 
     for i, face in enumerate(srfs):
 
-
         _is_int_wall = \
             isinstance(face.type, facetype.Wall) and \
             (isinstance(face.boundary_condition, bc.Surface) or
@@ -285,10 +290,10 @@ def simulate_batch(batch_fpath, epw_abs_fpath, model_json_fnames, sim_abs_fpath=
         sim_fpath: Path to simulation parameter json.
     """
 
-    sim_cmd = '--sim-par-json "{}"'.format(sim_abs_fpath) if sim_abs_fpath else ''
+    sim_cmd = '--sim-par-json "{}"'.format(
+        sim_abs_fpath) if sim_abs_fpath else ''
     # --bypass-check
     with open(batch_fpath, 'w') as fp:
         for name in model_json_fnames:
             fp.write('dragonfly-energy simulate model {} "{}" {} '
                      '\n'.format(name, epw_abs_fpath, sim_cmd))
-
