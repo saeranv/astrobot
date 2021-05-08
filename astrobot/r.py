@@ -17,6 +17,7 @@ class R(object):
         self._mod = None
         self._spc = None
         self._srf = None
+        self._win = None
 
         self.mod = dataframe
 
@@ -66,3 +67,4 @@ class R(object):
     def win(self, win):
         win['idx'] = win.index
         self._win = win.set_index('idx')
+

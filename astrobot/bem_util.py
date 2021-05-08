@@ -295,5 +295,5 @@ def simulate_batch(batch_fpath, epw_abs_fpath, model_json_fnames, sim_abs_fpath=
     # --bypass-check
     with open(batch_fpath, 'w') as fp:
         for name in model_json_fnames:
-            fp.write('dragonfly-energy simulate model {} "{}" {} '
+            fp.write('dragonfly-energy simulate model "{}" "{}" {} '
                      '\n'.format(name, epw_abs_fpath, sim_cmd))
