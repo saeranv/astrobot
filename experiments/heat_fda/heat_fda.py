@@ -149,22 +149,23 @@ def twod_loop(dimt=201, dimx=4.1, dimy=4.1, C=420, p=8, k=13.44):
     return uxy
 
 
-def oned_steady_state(dimx=1.5, C=420, p=8, k=13.44):
+def oned_steady_state(dimx=1.5, T0=100, TL=0, k=13.44):
     """
     1D steady heat conduction.
 
     Args:
         dimx = Number of nodes in x dimension spaced by 1mm.
         k = W/m2-K
+        T0 = Temperature at 0th boundary condition.
+        TL = Temeprature at Lth boundary condition
 
     Returns:
         2D matrix storing x dim.
     """
 
     # Set initial parameters
-    t_lo, t_hi = 0, 100
-    dimx = int(dimx/DX)
-
+    print('# of nodes: {}/{} = {}'.format(dimx, DX, int(np.round(dimx/DX, 0))))
+    dimx = int(np.round(dimx/DX, 0))
     # Set up material matrix
     # ux = np.ones((dimx, 1)) * t_lo
     # ux[:, 0, 1: -1] = t_hi
@@ -183,17 +184,9 @@ def oned_steady_state(dimx=1.5, C=420, p=8, k=13.44):
     A += np.diag(v=np.ones((dimx-1)) * k / DX2, k=1)
 
     # Add boundary
-    A[:, 0] = A[:, 0] * t_hi
-    A[:, 0] = 0
-    #print(np.where(A != 0.0, 1, 0))
-
-    # # Solve for x
     y = np.ones((dimx, 1))
-    flux = k * (t_hi - t_lo) * DX
-    y = -y * flux
-    # y[0, 0] = 1e10
-    print('flux', y.T)
-    #print('A', A)
+    y[ 0, 0] = -k * T0 / DX2
+    y[-1, 0] = -k * TL / DX2
     Ainv = np.linalg.pinv(A)
     ux = Ainv @ y
 

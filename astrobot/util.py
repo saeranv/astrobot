@@ -15,6 +15,7 @@ np.set_printoptions(precision=2)
 """
 import os
 from pprint import pprint
+import time
 
 # Package to astrobot/ root folder
 ROOT_DIR = os.path.abspath(os.path.join(__file__, '..', '..'))
@@ -39,3 +40,6 @@ def fd(module, key=None):
         return [m for m in dir(module)][::-1]
     else:
         return [m for m in dir(module) if hfd(m, key)][::-1]
+
+def str_time():
+    return time.strftime("%Y%m%d-%H%M%S")
