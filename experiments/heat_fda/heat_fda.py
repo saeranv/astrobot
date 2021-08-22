@@ -1,6 +1,6 @@
 """
 Derivation:
--q / x = Q
+-dq / dx = Q
 q = W/m2; Q = W/m3
 
 # Expand
@@ -14,6 +14,11 @@ d[-k dT/dx] = p C dT/dt
 
 # Solve for T2_t1
 T2_t1 = (-k dt / p C) (T3 - 2T2 + T1)/dx^2 + T2_t0
+
+# Process is:
+# Solve heat conducted: through volume: T1_t0, T2_t0, T3_t0 of boundary (must be some temp diff)
+# Output is W. Add Qsol and Qir (if needed) = W.
+# Multiply W by (dt / (p C)) and add T2_t0 = T2_t1
 
 Refs:
 https://scipython.com/book/chapter-7-matplotlib/examples/the-two-dimensional-diffusion-equation/
@@ -87,13 +92,17 @@ def oned_mtx(dimt=4, dimx=1.5, C=420, p=8, k=13.44):
     alpha = _diffusivity(C, p, k)  # 4 mm/s
     dimx = int(dimx / DX)
 
+    # Define spatial matrix of initial temperatures
     uxy = np.ones((dimt, dimx, 1)) * t_lo
     uxy[:, dimx // 2, :] = t_hi
 
     dt = _max_time_step(alpha, DX2)
 
     # A * v = b
-    # A: matrix of constants
+    # A: adjacency matrix of constants N x N
+    # v: N-vector of temps at timestep t
+    # b: N-vector of delta temps after finite difference transformation
+    # Note: Add b to v to get temps at timestep t + 1)
     # main diagonal: -2dt / dx2  (for T2)
     # lower diagonal: dt / dx2  (for T3)
     # upper diagonal: dt / dx2 (for T1)
