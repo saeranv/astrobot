@@ -2,13 +2,35 @@ from typing import List, Union, Tuple, Optional
 import os
 
 import numpy as np
-from shapely.geometry import Polygon
+import shapely.geometry as geom
 from . import mtx_util
 
 import ladybug_geometry.geometry3d as geom3
 import ladybug_geometry.geometry2d as geom2
 Face3D = geom3.face.Face3D
 Point3D = geom3.pointvector.Point3D
+
+
+def poly_sh(xy_arr):
+    """Shapely polygon from list of two arrays of x, y coordinates.
+
+        Args:
+            xy_arr: [x_arr, y_arr]
+    Example:
+        to_poly_sh(to_poly_np(poly_sh))
+        to_poly_np(to_poly_sh(poly_np))
+    """
+    return geom.Polygon([(x, y) for x, y in zip(*xy_arr)])
+
+
+def poly_np(poly_sh):
+    """Two arrays of x, y coordinates from shapely polygon.
+
+    Example:
+        to_poly_sh(to_poly_np(poly_sh))
+        to_poly_np(to_poly_sh(poly_np))
+    """
+    return np.array(poly_sh.exterior.xy)
 
 
 def to_lb_theta(theta: float) -> float:
@@ -30,10 +52,10 @@ def verts_to_pntmtx(vertices: List[Point3D]) -> np.ndarray:
     return np.array([vertex.to_array() for vertex in vertices]).T
 
 
-def face_to_polysh(face: Face3D) -> Polygon:
-    """Convert ladybug Face3D to shapely Polygon."""
+def face_to_polysh(face: Face3D) -> geom.Polygon:
+    """Convert ladybug Face3D to shapely geom.Polygon."""
 
-    return Polygon(np.array([v.to_array() for v in face.vertices])[:, :2])
+    return geom.Polygon(np.array([v.to_array() for v in face.vertices])[:, :2])
 
 
 def _rect_coords(aspect_ratio, dim):
