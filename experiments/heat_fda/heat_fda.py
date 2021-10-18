@@ -71,7 +71,7 @@ def oned_loop(dimt=4, dimx=1.5, C=420, p=8, k=13.44):
     for t in range(dimt-1):
         for i in range(1, dimx-1):
             # Central difference in 1D:
-            # T2_t1 = (-k dt / p C) (T3 - 2T2 + T1)/dx^2 + T2_t0
+            # T2_t1 = (-k dt / p C) (T3_t0 - 2T2_t0 + T1_t0)/dx^2 + T2_t0
             ux[t + 1, i] = \
                 (alpha * dt) * ((ux[t, i - 1] - (2 *  ux[t, i]) + ux[t, i + 1]) / DX2) + ux[t, i]
 
@@ -241,6 +241,8 @@ def oned_steady_state(dimx=1.5, T0=100, TL=0, k=13.44):
     y = np.zeros((dimx, 1))
     y[ 0, 0] = -k * T0 / DX2
     y[-1, 0] = -k * TL / DX2
+    # A @ ux = y (y = W); given materials and bc, solve for intermediate temps
+    # A^-1 @ y = ux
     Ainv = np.linalg.pinv(A)
     ux = Ainv @ y
 

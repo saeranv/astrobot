@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 from .util import *
 
-
 EIA_DIR = "resources/eia"
 CBECS_SURVEY_PKL = "cbecs_survey.pkl"
 CBECS_KEY_PKL = "cbecs_key.pkl"
