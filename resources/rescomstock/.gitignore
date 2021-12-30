@@ -1,3 +1,6 @@
 /metadata_comstock.tsv 
 /metadata_resstock.tsv 
 /*.parquet
+/1a-single-family_attached.csv 
+/1a-multi-famil_with_-_4_units.csv
+/1a-fullservicerestaurant.csv
