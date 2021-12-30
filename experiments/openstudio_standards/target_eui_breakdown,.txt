@@ -1,0 +1,21 @@
+# legacy_idf_results.csv
+Building Type,
+Template,
+Climate Zone,
+Heating|Electricity,Heating|Natural Gas,Heating|Additional Fuel,Heating|District Cooling,Heating|District Heating,Heating|Water,
+Cooling|Electricity,Cooling|Natural Gas,Cooling|Additional Fuel,Cooling|District Cooling,Cooling|District Heating,Cooling|Water,
+Interior Lighting|Electricity,Interior Lighting|Natural Gas,Interior Lighting|Additional Fuel,Interior Lighting|District Cooling,Interior Lighting|District Heating,Interior Lighting|Water,
+Exterior Lighting|Electricity,Exterior Lighting|Natural Gas,Exterior Lighting|Additional Fuel,Exterior Lighting|District Cooling,Exterior Lighting|District Heating,Exterior Lighting|Water,
+Interior Equipment|Electricity,Interior Equipment|Natural Gas,Interior Equipment|Additional Fuel,Interior Equipment|District Cooling,Interior Equipment|District Heating,Interior Equipment|Water,
+Exterior Equipment|Electricity,Exterior Equipment|Natural Gas,Exterior Equipment|Additional Fuel,Exterior Equipment|District Cooling,Exterior Equipment|District Heating,Exterior Equipment|Water,
+Fans|Electricity,Fans|Natural Gas,Fans|Additional Fuel,Fans|District Cooling,Fans|District Heating,Fans|Water,
+Pumps|Electricity,Pumps|Natural Gas,Pumps|Additional Fuel,Pumps|District Cooling,Pumps|District Heating,Pumps|Water,
+Heat Rejection|Electricity,Heat Rejection|Natural Gas,Heat Rejection|Additional Fuel,Heat Rejection|District Cooling,Heat Rejection|District Heating,Heat Rejection|Water,
+Humidification|Electricity,Humidification|Natural Gas,Humidification|Additional Fuel,Humidification|District Cooling,Humidification|District Heating,Humidification|Water,
+Heat Recovery|Electricity,Heat Recovery|Natural Gas,Heat Recovery|Additional Fuel,Heat Recovery|District Cooling,Heat Recovery|District Heating,Heat Recovery|Water,
+Water Systems|Electricity,Water Systems|Natural Gas,Water Systems|Additional Fuel,Water Systems|District Cooling,Water Systems|District Heating,Water Systems|Water,
+Refrigeration|Electricity,Refrigeration|Natural Gas,Refrigeration|Additional Fuel,Refrigeration|District Cooling,Refrigeration|District Heating,Refrigeration|Water,
+Generators|Electricity,Generators|Natural Gas,Generators|Additional Fuel,Generators|District Cooling,Generators|District Heating,Generators|Water
+
+HighriseApartment,90.1-2013,ASHRAE 169-2006-
+4B,37.01,122.49,0.0,0.0,0.0,0.0,450.22,0.0,0.0,0.0,0.0,0.0,267.59,0.0,0.0,0.0,0.0,0.0,162.84,0.0,0.0,0.0,0.0,0.0,1130.76,0.0,0.0,0.0,0.0,0.0,20.81,0.0,0.0,0.0,0.0,0.0,668.06,0.0,0.0,0.0,0.0,0.0,44.76,0.0,0.0,0.0,0.0,0.0,17.2,0.0,0.0,0.0,0.0,1792.81,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1090.24,0.0,0.0,0.0,4778.51,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0

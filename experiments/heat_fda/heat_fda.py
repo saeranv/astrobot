@@ -223,7 +223,7 @@ def oned_steady_state(dimx=1.5, T0=100, TL=0, k=13.44):
 
     # A: matrix of constants
     # Based on equations on pg. 325 of Cengel
-    # k(Tx3 - 2*T2 + Tx1) / dx2 + k(Ty3 - 2*T2 + Ty1) / dy2 = 0
+    # [k(Tx3 - 2*T2 + Tx1) / dx2] + [k(Ty3 - 2*T2 + Ty1) / dy2] = 0
     # k(Tx3 + Ty3 - 4*T2 + Tx1 + Ty1) / dx2 = 0
 
     # Note: can remove k/DX2 since everything is constant. It cancels out.
