@@ -1,0 +1,100 @@
+enumerations	enumeration_description
+ASHRAE 169-2013-1A	ASHRAE 90.1 climate zone 1A
+ASHRAE 169-2013-2A	ASHRAE 90.1 climate zone 2A
+ASHRAE 169-2013-2B	ASHRAE 90.1 climate zone 2B
+ASHRAE 169-2013-3A	ASHRAE 90.1 climate zone 3A
+ASHRAE 169-2013-3B	ASHRAE 90.1 climate zone 3B
+ASHRAE 169-2013-4A	ASHRAE 90.1 climate zone 4A
+ASHRAE 169-2013-4B	ASHRAE 90.1 climate zone 4B
+ASHRAE 169-2013-4C	ASHRAE 90.1 climate zone 4C
+ASHRAE 169-2013-5A	ASHRAE 90.1 climate zone 5A
+ASHRAE 169-2013-5B	ASHRAE 90.1 climate zone 5B
+ASHRAE 169-2013-6A	ASHRAE 90.1 climate zone 6A
+ASHRAE 169-2013-6B	ASHRAE 90.1 climate zone 6B
+ASHRAE 169-2013-7A	ASHRAE 90.1 climate zone 7A
+ASHRAE 169-2013-8A	ASHRAE 90.1 climate zone 8A
+Baseboard electric	HVAC system type using zone electric resistance baseboard heating and no cooling, no outside ventilation air
+Baseboard gas boiler	HVAC system type using zone hot water baseboard heating from gas boiler and no cooling, no outside ventilation air
+DOAS with VRF	HVAC system type using zone variable refrigerant flow air source heat pumps for heating and cooling, outside ventilation air provided by DOAS
+DOAS with fan coil air-cooled chiller with boiler	HVAC system type using zone fan coil units for heating and cooling from gas boiler and air-cooled chiller, outside ventilation air provided by DOAS
+DOAS with fan coil chiller with boiler	HVAC system type using zone fan coil units for heating and cooling from gas boiler and water-cooled chiller, outside ventilation air provided by DOAS
+DOAS with water source heat pumps cooling tower with boiler	HVAC system type using zone water source heat pumps for heating and cooling with heat rejection served by cooling tower and gas boiler, outside ventilation air provided by DOAS
+DOAS with water source heat pumps with ground source heat pump	HVAC system type using zone water source heat pumps for heating and cooling with heat rejection served by ground loop, outside ventilation air provided by DOAS
+Direct evap coolers with baseboard electric	HVAC system type using direct evaporative coolers for cooling and zone electric resistance baseboard heating, outside ventilation air supplied directly through system
+Direct evap coolers with forced air furnace	HVAC system type using direct evaporative coolers for cooling and forced air furnace heating, outside ventilation air supplied directly through system
+Direct evap coolers with gas unit heaters	HVAC system type using direct evaporative coolers for cooling and gas unit heaters for heating, outside ventilation air supplied directly through system
+Direct evap coolers with no heat...	HVAC system type using direct evaporative coolers for cooling and no heating, outside ventilation air supplied directly through system
+DistrictHeating	Fuel type of fuel oil for either space heating, water heating, equipment, etc.
+Electricity	Fuel type of electricity for either space heating, water heating, equipment, etc.
+Fan coil air-cooled chiller with boiler	HVAC system type using zone fan coil units for heating and cooling from gas boiler and air-cooled chiller, outside ventilation air supplied directly through system
+Fan coil air-cooled chiller with no heat	HVAC system type using zone fan coil units for cooling from air-cooled chiller and no heating, outside ventilation air supplied directly through system
+Fan coil chiller with baseboard electric	HVAC system type using zone fan coil units for cooling from air-cooled chiller and heating from zone electric resistance baseboard, outside ventilation air supplied directly through system
+Fan coil chiller with boiler	HVAC system type using zone fan coil units for heating and cooling from gas boiler and water-cooled chiller, outside ventilation air supplied directly through system
+Fan coil chiller with district hot water	HVAC system type using zone fan coil units for heating and cooling from district hot water and water-cooled chiller, outside ventilation air supplied directly through system
+Fan coil chiller with no heat	HVAC system type using zone fan coil units for cooling  water-cooled chiller with no heating, outside ventilation air supplied directly through system
+Fan coil district chilled water with district hot water	HVAC system type using zone fan coil units for heating and cooling from district hot water and district chilled water, outside ventilation air supplied directly through system
+Forced air furnace	HVAC system type using forced air furnace for heating
+FuelOil	Fuel type of Fuel Oil for either space heating, water heating, equipment, etc.
+FullServiceRestaurant	Full service restaurant building type
+Gas unit heaters	HVAC system type using zone gas unit heaters for heating and no cooling, no outside ventilation air
+Hospital	Hospital building type
+LargeHotel	Large hotel building type
+LargeOffice	Large office building type
+MediumOffice	Medium office building type
+NaturalGas	Fuel type of Fuel Oil for either space heating, water heating, equipment, etc.
+NoHeating	Specifies no heating for HVAC system
+Outpatient	Outpatient building type
+PSZ-AC district chilled water with district hot water	HVAC system type using constant air volume single-zone air handling unit with cooling from district chilled water system and heating from district heating system, outside ventilation air supplied directly through system
+PSZ-AC district chilled water with electric coil	HVAC system type using constant air volume single-zone air handling unit with cooling from district chilled water system and heating from electric resistance coil, outside ventilation air supplied directly through system
+PSZ-AC with baseboard electric	HVAC system type using constant air volume single-zone air handling unit with DX cooling and heating from zone electric resistance baseboards, outside ventilation air supplied directly through system
+PSZ-AC with baseboard gas boiler	HVAC system type using constant air volume single-zone air handling unit with DX cooling and zone hot water baseboard heating from gas boiler, outside ventilation air supplied directly through system
+PSZ-AC with electric coil	HVAC system type using constant air volume single-zone air handling unit with DX cooling and electric resistance heating, outside ventilation air supplied directly through system
+PSZ-AC with gas boiler	HVAC system type using constant air volume single-zone air handling unit with DX cooling and hot water heating from gas boiler, outside ventilation air supplied directly through system
+PSZ-AC with gas coil	HVAC system type using constant air volume single-zone air handling unit with DX cooling and gas furnace heating, outside ventilation air supplied directly through system
+PSZ-AC with gas unit heaters	HVAC system type using constant air volume single-zone air handling unit with DX cooling and gas unit heaters for heating, outside ventilation air supplied directly through system
+PSZ-AC with no heat	HVAC system type using constant air volume single-zone air handling unit with DX cooling and no heat, outside ventilation air supplied directly through system
+PSZ-HP	HVAC system type using constant air volume single-zone air handling unit with air source heat pump for heating and cooling, outside ventilation air supplied directly through system
+PTAC with baseboard district hot water	HVAC system type using zone packaged terminal air conditioners with DX cooling and zone hot water baseboard heating from district heating system, outside ventilation air supplied directly through system
+PTAC with baseboard electric	HVAC system type using zone packaged terminal air conditioners with DX cooling and zone electric resistance baseboard heating, outside ventilation air supplied directly through system
+PTAC with baseboard gas boiler	HVAC system type using zone packaged terminal air conditioners with DX cooling and zone hot water baseboard heating from gas boiler, outside ventilation air supplied directly through system
+PTAC with electric coil	HVAC system type using zone packaged terminal air conditioners with DX cooling and electric resistance heating, outside ventilation air supplied directly through system
+PTAC with gas boiler	HVAC system type using zone packaged terminal air conditioners with DX cooling and hot water heating from gas boiler, outside ventilation air supplied directly through system
+PTAC with gas coil	HVAC system type using zone packaged terminal air conditioners with DX cooling and gas furnace heating, outside ventilation air supplied directly through system
+PTAC with gas unit heaters	HVAC system type using zone packaged terminal air conditioners with DX cooling and gas unit heaters for heating, outside ventilation air supplied directly through system
+PTAC with no heat	HVAC system type using zone packaged terminal air conditioners with DX cooling and no heat, outside ventilation air supplied directly through system
+PTHP	HVAC system type using zone packaged terminal heat pump with air source heat pump for heating and cooling, outside ventilation air supplied directly through system
+PVAV with PFP boxes	HVAC system type using packaged variable air volume system with electric resistance heating/reheating and dx cooling, outside ventilation air supplied directly through system
+PVAV with gas boiler reheat	HVAC system type using packaged variable air volume system with hot water heating/reheating from gas boiler and dx cooling, outside ventilation air supplied directly through system
+PrimarySchool	Primary school building type
+Propane	Fuel type of propane for either space heating, water heating, equipment, etc.
+QuickServiceRestaurant	Quick service restaurant building type
+Residential AC with baseboard electric	HVAC system type using residential forced air system with DX cooling and zone electric resistance baseboard heating, no outside ventilation air
+Residential AC with no heat	HVAC system type using residential forced air system with DX cooling and no heating, no outside ventilation air
+Residential AC with residential forced air furnace	HVAC system type using residential forced air system with DX cooling and gas furnace heating, no outside ventilation air
+Residential forced air furnace	HVAC system type using residential forced air system with gas furnace heating and no cooling, no outside ventilation air
+RetailStandalone	Standalone retail building type
+RetailStripmall	Strip mall retail building type
+SecondarySchool	Secondary school building type
+SmallHotel	Small hotel building type
+SmallOffice	Small office building type
+T24-CEC1	California Energy Commission Title 24 climate zone 1
+T24-CEC10	California Energy Commission Title 24 climate zone 10
+T24-CEC11	California Energy Commission Title 24 climate zone 11
+T24-CEC12	California Energy Commission Title 24 climate zone 12
+T24-CEC13	California Energy Commission Title 24 climate zone 13
+T24-CEC15	California Energy Commission Title 24 climate zone 15
+T24-CEC16	California Energy Commission Title 24 climate zone 16
+T24-CEC2	California Energy Commission Title 24 climate zone 2
+T24-CEC3	California Energy Commission Title 24 climate zone 3
+T24-CEC4	California Energy Commission Title 24 climate zone 4
+T24-CEC5	California Energy Commission Title 24 climate zone 5
+T24-CEC6	California Energy Commission Title 24 climate zone 6
+T24-CEC7	California Energy Commission Title 24 climate zone 7
+T24-CEC8	California Energy Commission Title 24 climate zone 8
+T24-CEC9	California Energy Commission Title 24 climate zone 9
+VAV air-cooled chiller with gas boiler reheat	HVAC system type using variable air volume system with hot water heating/reheating from gas boiler and chilled water cooling from air cooled chiller, outside ventilation air supplied directly through system
+VAV chiller with gas boiler reheat	HVAC system type using variable air volume system with hot water heating/reheating from gas boiler and chilled water cooling from water cooled chiller, outside ventilation air supplied directly through system
+VAV chiller with gas coil reheat	HVAC system type using variable air volume system with gas furnace heating/reheating and chilled water cooling from water cooled chiller, outside ventilation air supplied directly through system
+VAV district chilled water with district hot water reheat	HVAC system type using variable air volume system with  heating/reheating from district heating system and chilled water cooling from district chilled water system, outside ventilation air supplied directly through system
+Warehouse	Warehouse building type
+Water source heat pumps with ground source heat pump	HVAC system type using zone water source heat pumps for heating and cooling with heat rejection served by ground loop, outside ventilation air supplied directly through system

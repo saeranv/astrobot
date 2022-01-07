@@ -1,0 +1,65 @@
+field_name	field_location	data_type	units	field_description	allowable_enumeration
+applicability	metadata	boolean		Specifies if an upgrade measure was applicable to model if an upgrade was run	True|False
+in.upgrade_name	metadata	string		Name of upgrade if an upgrade was run	
+in.aspect_ratio	metadata	float	ratio	Aspect ratio of building geometry which is the ratio of North/South Facade Length Relative to East/West Facade Length	1.0|2.0|3.0|6.0|4.0|5.0
+in.county	metadata	string		County ID of building model	G1200110|G3600590|G3900490|G1301210|G0600710|G1700310|G3400130|G4802010|G1302450|G3901130|G3601130|G1701630|G4801410|G2600990|G2400030|G4800290|G2905100|G0600670|G3600470|G5501330|G3900350|G1300950|G4000510|G4100050|G0800450|G0600850|G1300450|G3600630|G5100930|G1201030|G2200710|G2001730|G2500210|G3200030|G4900350|G4400070|G3701470|G4701570|G1901690|G2300050|G3600810|G0600590|G4200690|G3701830|G1200570|G1200830|G4201010|G2601630|G0600070|G5100590...
+in.building_type	metadata	string		Primary building type of model	FullServiceRestaurant|RetailStripmall|Warehouse|RetailStandalone|SmallOffice|PrimarySchool|MediumOffice|SecondarySchool|Outpatient|QuickServiceRestaurant|LargeOffice|LargeHotel|SmallHotel|Hospital
+in.rotation	metadata	float	deg	Building Rotation off of North axis (positive value is clockwise)	135.0|0.0|180.0|225.0|90.0|315.0|270.0|45.0
+in.number_of_stories	metadata	float	num_stories	Building number of stories above grade	1.0|2.0|13.0|4.0|3.0|8.0|20.0|12.0|11.0|10.0|9.0|6.0|5.0|30.0|7.0|14.0
+in.sqft	metadata	float	ft^2	Building total floor area	1000.0|37500.0|150000.0|17500.0|75000.0|7500.0|3000.0|350000.0|750000.0|1000000.0
+in.hvac_system_type	metadata	string		Building primary HVAC system type	PSZ-AC with electric coil|PSZ-AC with gas coil|Gas unit heaters|Forced air furnace|PSZ-AC with no heat|Fan coil chiller with boiler|PTAC with gas coil|PSZ-AC with gas boiler|Baseboard electric|VAV air-cooled chiller with gas boiler reheat|PTAC with no heat|PSZ-HP|Water source heat pumps with ground source heat pump|Residential AC with residential forced air furnace|Direct evap coolers with gas unit heaters|Direct evap coolers with forced air furnace|PTHP|PSZ-AC with gas unit heaters|PTAC with electric coil|PSZ-AC with baseboard gas boiler|PTAC with gas boiler|VAV chiller with gas boiler reheat|Fan coil chiller with no heat|PVAV with PFP boxes|Fan coil chiller with district hot water|Baseboard gas boiler|PVAV with gas boiler reheat|DOAS with VRF|PSZ-AC with baseboard electric|PTAC with baseboard electric|PTAC with baseboard gas boiler|Residential AC with no heat|PTAC with baseboard district hot water|Fan coil air-cooled chiller with boiler|DOAS with fan coil chiller with boiler|DOAS with fan coil air-cooled chiller with boiler|Direct evap coolers with baseboard electric|Residential forced air furnace|PSZ-AC district chilled water with electric coil|DOAS with water source heat pumps cooling tower with boiler|VAV district chilled water with district hot water reheat|Fan coil air-cooled chiller with no heat|DOAS with water source heat pumps with ground source heat pump|Residential AC with baseboard electric|Fan coil district chilled water with district hot water|VAV chiller with gas coil reheat|PTAC with gas unit heaters|PSZ-AC district chilled water with district hot water|Fan coil chiller with baseboard electric|Direct evap coolers with no heat...
+in.weekday_operating_hours	metadata	float	hour	Building duration of weekday hours of operation which influences duration of schedules	9.0|11.75|10.25|12.0|8.5|8.75|15.5|8.0|8.25|9.25|7.5|15.75|14.25|16.0|7.0|6.5|7.75|10.5|7.25|9.75|6.0|16.5|11.5|11.25|15.25|18.25|11.0|12.5|10.75|13.5|13.0|12.75|5.75|13.25|6.25|9.5|10.0|6.75|14.75|15.0|13.75|14.5|16.75|18.0|14.0|12.25|17.0|16.25|17.75|18.5...
+in.weekday_opening_time	metadata	float	hour	Building weekday start hour which impacts the start time of schedules	7.0|8.0|9.5|10.75|10.25|6.75|6.5|9.25|8.5|7.5|4.25|4.75|3.75|7.75|7.25|6.25|5.25|10.0|9.75|5.5|8.25|11.25|3.5|9.0|11.5|10.5|11.0|5.75|6.0|8.75|4.5|12.0|4.0|5.0|11.75|12.25
+in.weekend_operating_hours	metadata	float	hour	Building duration of weekend hours of operation which influences duration of schedules	8.0|11.5|10.75|7.75|13.75|7.25|8.5|7.0|9.0|9.25|14.0|16.5|9.5|11.75|10.0|12.5|12.25|14.75|16.75|10.25|13.5|9.75|10.5|13.25|6.75|18.75|8.75|7.5|8.25|15.5|17.0|11.0|12.75|16.0|12.0|15.75|11.25|14.25|5.75|6.25|18.25|14.5|17.5|15.25|13.0|6.0|6.5|18.0|17.25|15.0...
+in.weekend_opening_time	metadata	float	hour	Building weekend start hour which impacts the start time of schedules	7.0|8.25|9.75|11.25|10.5|10.75|6.75|4.75|9.5|6.25|11.75|11.0|12.0|3.75|6.0|4.0|8.75|5.5|11.5|7.5|9.25|5.0|10.25|9.0|8.5|7.25|5.25|10.0|4.5|6.5|5.75|7.75|3.5|12.25|8.0|4.25
+in.heating_fuel	metadata	string		Building primary HVAC heating fuel source	Electricity|NaturalGas|NoHeating|FuelOil|Propane|DistrictHeating
+in.service_water_heating_fuel	metadata	string		Building primary service water heating fuel source	Electricity|NaturalGas|FuelOil|Propane|DistrictHeating
+out.electricity.peak_demand.energy_consumption	metadata	float	kW	Building annual peak electric demand	
+out.district_cooling_cooling_therm	metadata	float	therm	Building annual district cooling energy consumption for cooling end use	
+out.district_heating_heating_therm	metadata	float	therm	Building annual district heating energy consumption for heating end use	
+out.district_heating_water_systems_therm	metadata	float	therm	Building annual district service water heating energy consumption for water systems end use	
+out.electricity.cooling.energy_consumption	metadata|timeseries	float	kWh	Building annual cooling electricity energy consumption	
+out.electricity.exterior_lighting.energy_consumption	metadata|timeseries	float	kWh	Building annual exterior lighting electricity energy consumption	
+out.electricity.fans.energy_consumption	metadata|timeseries	float	kWh	Building annual fan electricity energy consumption	
+out.electricity.heat_recovery.energy_consumption	metadata|timeseries	float	kWh	Building annual heat recovery electricity energy consumption	
+out.electricity.heat_rejection.energy_consumption	metadata|timeseries	float	kWh	Building annual heat rejection electricity energy consumption	
+out.electricity.heating.energy_consumption	metadata|timeseries	float	kWh	Building annual heating electricity energy consumption	
+out.electricity.interior_equipment.energy_consumption	metadata|timeseries	float	kWh	Building annual interior equipment electricity energy consumption	
+out.electricity.interior_lighting.energy_consumption	metadata|timeseries	float	kWh	Building annual interior lighting electricity energy consumption	
+out.electricity.pumps.energy_consumption	metadata|timeseries	float	kWh	Building annual pump electricity energy consumption	
+out.electricity.refrigeration.energy_consumption	metadata|timeseries	float	kWh	Building annual commercial refrigetation electricity energy consumption	
+out.electricity.water_systems.energy_consumption	metadata|timeseries	float	kWh	Building annual service water heating electricity energy consumption	
+out.natural_gas.heating.energy_consumption	metadata|timeseries	float	therm	Building annual heating natural gas energy consumption	
+out.natural_gas.interior_equipment.energy_consumption	metadata|timeseries	float	therm	Building annual interior equipment natural gas energy consumption	
+out.natural_gas.water_systems.energy_consumption	metadata|timeseries	float	therm	Building annual service water heating natural gas energy consumption	
+out.other_fuel.heating.energy_consumption	metadata|timeseries	float	million_BTU	Building annual heating energy consumption for other fuels	
+out.other_fuel.interior_equipment.energy_consumption	metadata|timeseries	float	million_BTU	Annual interior equipment energy consumption for other fuels in million BTUs	0
+out.other_fuel.water_systems.energy_consumption	metadata|timeseries	float	million_BTU	Building annual service water heating energy consumption for other fuels	
+out.total_site_district_cooling_therm	metadata	float	therm	Building annual total site district cooling consumption	
+out.total_site_district_heating_therm	metadata	float	therm	Building annual total site district heating consumption	
+out.electricity.total.energy_consumption	metadata|timeseries	float	kwh	Building annual total site electricity energy consumption	
+out.site_energy.total.energy_consumption	metadata	float	million_BTU	Building annual total site energy consumption	
+out.natural_gas.total.energy_consumption	metadata|timeseries	float	therm	Building annual total site natural gas energy consumption	
+out.other_fuel.total.energy_consumption	metadata|timeseries	float	million_BTU	Building annual total site energy consumption for other fuels	
+in.nhgis_tract_gisjoin	metadata	string		Census tract identifier, according to format of https://www.nhgis.org/geographic-crosswalks#details	
+in.nhgis_county_gisjoin	metadata	string		County identified, according to format of https://www.nhgis.org/geographic-crosswalks#details	
+in.state_name	metadata	string		Full name of state	
+in.state_abbreviation	metadata	string		Postal abbreviation of state	
+in.census_division_name	metadata	string		Census division name	
+in.census_region_name	metadata	string		Census region name	
+in.weather_file_2018	metadata	string		Weather file used for the 2018 AMY simulations	
+in.weather_file_TMY3	metadata	string		Weather file used for the TMY3 simulations	
+in.climate_zone_building_america	metadata	string		DOE Building America climate zone	
+in.climate_zone_ashrae_2004	metadata	string		ASHRAE Standard 169	
+in.iso_region	metadata	string		Electric system ISO/RTO region	
+in.reeds_balancing_area	metadata	string		Balancing area ID for the NREL ReEDS modeling tool	
+in.resstock_county_id	metadata	string		State abbreviation and county name	
+in.nhgis_puma_gisjoin	metadata	string		Census PUMA identifier, according to format of https://www.nhgis.org/geographic-crosswalks#details	
+timestamp	timeseries	timestamp			
+models_used	timeseries	float		The number of energy models used to represent the results in this aggregate timeseries profile	
+floor_area_represented	timeseries	float	ft^2	The scaled square footage represented by the buildings included in this aggregate timeseries profile	
+out.district_cooling.cooling.energy_consumption	timeseries	float	kWh	Building annual district cooling energy consumption for cooling end use	
+out.district_heating.heating.energy_consumption	timeseries	float	kWh	Building annual district heating energy consumption for heating end use	
+out.district_heating.water_systems.energy_consumption	timeseries	float	kWh	Building annual district heating energy consumption for the service water heating end use	
+out.district_cooling.total.energy_consumption	timeseries	float	kWh	Building annual district cooling energy consumption for all end uses combined	
+out.district_heating.total.energy_consumption	timeseries	float	kWh	Building annual district heating energy consumption for all end uses combined	
