@@ -1,72 +1,109 @@
 """Distributions from empirical datasets"""
 import numpy as np
 import pandas as pd
-from scipy.stats._binned_statistic import binned_statistic, BinnedStatisticddResult
-from typing import List, Set
+from typing import Set, Sequence
 
 
 class Pmf1(object):
     """One-dimensional Probability Mass Function (pmf) for discrete data."""
     # TODO: add bld_idx
-    def __init__(self, qs:np.ndarray, ps:np.ndarray, bins:int) -> None:
+    def __init__(self, qs:np.ndarray, ps:np.ndarray, id:np.ndarray, bins:int) -> None:
         """Initialize pmf properties."""
-        self._qs = qs.to_numpy() if isinstance(qs, pd.Series) else qs
-        self._ps = ps.to_numpy() if isinstance(ps, pd.Series) else ps
-        self.N = np.sum(self._ps)  # total var dataset size
+        self.qs_arr = qs if isinstance(qs, np.ndarray) else np.array(qs)
+        self.ps_arr = ps if isinstance(ps, np.ndarray) else np.array(ps)
+        self.id_arr= np.array(id, dtype=int)
+        self.N = np.sum(self.ps_arr)  # total var dataset size
         self.bins = bins
-        # TODO: calc bin_edge manually and use make_bin_arr
-        self._binstat = binned_statistic(
-            self._qs, self._qs, bins=self.bins, statistic="mean",
-            range=(self._qs.min(), self._qs.max()))
-        self._binnumber = self._binstat.binnumber - 1
+        self._bin_edges = None
+        self._bin_mu = None
+        self._bin_idx = None
         self._df = None
         self.prec = 2
-
 
     def __repr__(self) -> str:
         return "Pmf1: bins={}, N={}.".format(self.bins, round(self.N, 2))
 
     @property
+    def bin_idx(self):
+        """Nested list of qs indices per bin.
+
+        qs = [0, 1, 3, 1, 2]
+        dist = Pmf1(qs, ps, bins=3)
+        dist.bin_idx: [[0], [1, 3], [2, 4]]
+        """
+        if self._bin_idx is None:
+            bin_data = make_bin_data(
+                self.qs_arr, bins=self.bins, bin_range=(self.qs_arr.min(), self.qs_arr.max()))
+            self._bin_idx, self._bin_mu, self._bin_edges = bin_data
+        return self._bin_idx
+
+    @property
+    def bin_mu(self):
+        """Array of mean qs of bin.
+
+        qs = [0, 1, 3, 1, 2]
+        dist = Pmf1(qs, ps, bins=3)
+        dist.bin_mu: [0.5, 1.5, 2.5]
+        """
+        if self._bin_mu is None:
+            bin_data = make_bin_data(
+                self.qs_arr, bins=self.bins, bin_range=(self.qs_arr.min(), self.qs_arr.max()))
+            self._bin_idx, self._bin_mu, self._bin_edges = bin_data
+        return self._bin_mu
+
+    @property
+    def bin_edges(self):
+        """Array of bin_edges.
+
+        qs = [0, 1, 3, 1, 2]
+        dist = Pmf1(qs, ps, bins=3)
+        dist.bin_edges: [0, 1, 2, 3]
+        """
+        if self._bin_edges is None:
+            bin_data = make_bin_data(
+                self.qs_arr, bins=self.bins, bin_range=(self.qs_arr.min(), self.qs_arr.max()))
+            self._bin_idx, self._bin_mu, self._bin_edges = bin_data
+        return self._bin_edges
+
+    @property
     def df(self):
         if self._df is None:
-            _df = _make_pmf1(self._qs, self._ps, self._binstat)
-            self._df = _df
-
+            self._df = _make_pmf1(self.qs_arr, self.ps_arr, self.bin_idx, self.bin_mu)
         return self._df
 
-# TODO: rewrite this with make_bin_arr
-def _make_pmf1(qs:np.ndarray, ps:np.ndarray, binstat: BinnedStatisticddResult) -> np.ndarray:
+def _make_pmf1(qs:np.ndarray, ps:np.ndarray, bin_idx:Sequence, bin_mu:np.ndarray) -> np.ndarray:
     """Pmf1 object from empirical data."""
 
     N = np.sum(ps)  # total var dataset size
-    bins = binstat.bin_edges.shape[0] - 1
+    bins = len(bin_idx)
+    binps_arr = [np.sum(ps[bi]) for bi in bin_idx]
 
     # Create initial dataframe
-    _df = pd.DataFrame(
-        {"bins": binstat.binnumber - 1,
-         "ps": ps / N})  # normalize by dataset size
-
-    # Create bin_df before grouping since not all datapoints are in
-    # bins, so we need to explicitly create bins that will have 0 prob.
-    bin_df = pd.DataFrame({"ps": np.zeros(bins)})
-    bin_idx = np.unique(binstat.binnumber - 1) # existing bins
-    # Group by bins to create df
-    bin_df.loc[bin_idx, :] = _df.groupby("bins").sum()
-
-    # Add statistic
-    bin_edges = binstat.bin_edges
-    bin_df["qs"] = bin_edges[:-1] + np.diff(bin_edges) / 2.0
+    bin_df = pd.DataFrame(
+        {"bins": range(bins),
+         "ps": np.array(binps_arr) / N, # normalize by dataset size
+         "qs": bin_mu})
 
     return bin_df
 
-def make_bin_arr(val:np.ndarray, binnumber:np.ndarray) -> List[np.ndarray]:
-    """Creates nested list of value array binned to pmf."""
-    binnumber_ = binnumber[:]  # make copy
-    return [val[np.where(b == binnumber_)] for b in range(binnumber_.max() + 1)]
+def make_bin_data(vals:np.ndarray, bins:int, bin_range:Sequence[float], eps=1e-10) -> Sequence[float]:
+    """Creates bins from vals."""
+    # Get bin_edges
+    min_edge, max_edge = bin_range
+    bin_inc = (max_edge - min_edge) / bins
+    bin_edges = min_edge + np.array([bin_inc * i for i in range(bins + 1)])
 
-def make_bin_set(val:np.ndarray, binnumber:np.ndarray) -> List[Set]:
-    """Creates nested list of value set binned to pmf."""
-    return [set(b) for b in make_bin_arr(val, binnumber)]
+    # Get bin_mu
+    bin_mu = np.array([np.mean(bin_edges[[i-1, i]])
+                       for i in range(1, bins + 1)])
+
+    # Get binnumber
+    bin_edges[-1] += eps  # to force last datapoint in
+    _in_bin_fx = lambda v, lo, hi: np.where((v >= lo) & (v < hi))[0]
+    bin_idx = [_in_bin_fx(vals, bin_edges[i-1], bin_edges[i]).tolist()
+               for i in range(1, bins + 1)]
+
+    return bin_idx, bin_mu, bin_edges
 
 def prec(pmf_df, precision:int=2) -> pd.DataFrame:
     """Mutates precisions in Pmf for pretty printing."""
