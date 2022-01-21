@@ -1,3 +1,4 @@
+"""Tests for pmf. Run with `python -m pytest tests`"""
 from astrobot import pmf
 import numpy as np
 import pandas as pd
@@ -11,8 +12,23 @@ def _make_dataset():
         {"qs": np.array([.1, .2, .2, .3, .1]),
          "ps": np.array([2., 1., 1., 2., 3.])})
 
-def test_make_pmf1():
-    """Test _make_pmf1."""
+
+def _make_independent_joint_dataset():
+    """Coins (independent)."""
+    return pd.DataFrame(
+        {"qs1": [0, 1, 0, 1],
+         "qs2": [0, 1, 1, 0]})
+
+
+def _make_dependent_joint_dataset():
+    """Glued coins (dependant)."""
+    return pd.DataFrame(
+        {"qs1": [0, 1, 0, 1],
+         "qs2": [0, 1, 0, 1]})
+
+
+def test_make_pmf():
+    """Test _make_pmf."""
 
     data = _make_dataset()
     qs, ps = data.qs.values, data.ps.values
@@ -20,7 +36,7 @@ def test_make_pmf1():
     bin_edges = pmf.make_bin_edges(qs, bins=3, bin_range=(qs.min(), qs.max()))
     bin_idx = pmf.make_bin_idx(qs, bin_edges)
 
-    df = pmf._make_pmf1(qs, ps, bin_idx, bin_edges)
+    df = pmf._make_pmf(qs, ps, bin_idx, bin_edges, np.mean)
 
     # Correct values
     bin_idx = [0, 1, 2]
@@ -94,3 +110,33 @@ def test_make_bin_idx():
     tst_bin_idx_ = [np.allclose(tst_bin, bin, atol=1e-10)
                     for tst_bin, bin in zip(tst_bin_arr, bin_arr)]
     assert np.all(tst_bin_idx_)
+
+
+def test_make_joint_pmf():
+    """Test joint pmf"""
+
+    # Get dataset
+    ind_dataset = _make_independent_joint_dataset()
+    dep_dataset = _make_dependent_joint_dataset()
+    states1 = np.unique(ind_dataset.qs1)
+    states2 = np.unique(ind_dataset.qs2)
+
+    # Test dependent data
+    joint_mtx = pmf._make_joint_pmf_mtx(
+        pmf._seq2arr(dep_dataset.qs1), pmf._seq2arr(dep_dataset.qs2),
+        states1, states2)
+    test_joint_mtx = np.array(
+        [[.5, 0.],
+         [0., .5]])
+
+    assert np.allclose(joint_mtx, test_joint_mtx, atol=1e-5)
+
+    # Test independent data
+    joint_mtx = pmf._make_joint_pmf_mtx(
+        pmf._seq2arr(ind_dataset.qs1), pmf._seq2arr(ind_dataset.qs2),
+        states1, states2)
+    test_joint_mtx = np.array(
+        [[.25, .25],
+         [.25, .25]])
+
+    assert np.allclose(joint_mtx, test_joint_mtx, atol=1e-5)

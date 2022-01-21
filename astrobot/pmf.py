@@ -10,7 +10,7 @@ def pp(x, *args):
     pprint(x) if not args else (pprint(x), pp(*args))
 
 
-class Pmf1(object):
+class Pmf(object):
     """One-dimensional Probability Mass Function (pmf) for discrete data."""
 
     def __init__(self, qs:np.ndarray, bins:int, ps:np.ndarray=None,
@@ -39,14 +39,14 @@ class Pmf1(object):
         self.prec = 2
 
     def __repr__(self) -> str:
-        return "Pmf1: bins={}, N={}.".format(self.bins, round(self.N, 2))
+        return "Pmf: bins={}, N={}.".format(self.bins, round(self.N, 2))
 
     @property
     def bin_idx(self):
         """Nested list of qs indices per bin.
 
         qs = [0, 1, 3, 1, 2]
-        dist = Pmf1(qs, ps, bins=3)
+        dist = Pmf(qs, ps, bins=3)
         dist.bin_idx: [[0], [1, 3], [2, 4]]
         """
         if self._bin_idx is None:
@@ -58,7 +58,7 @@ class Pmf1(object):
         """Array of bin_edges.
 
         qs = [0, 1, 3, 1, 2]
-        dist = Pmf1(qs, ps, bins=3)
+        dist = Pmf(qs, ps, bins=3)
         dist.bin_edges: [0, 1, 2, 3]
         """
         if self._bin_edges is None:
@@ -70,8 +70,41 @@ class Pmf1(object):
     @property
     def df(self):
         if self._df is None:
-            self._df = _make_pmf1(self.qs_arr, self.ps_arr, self.bin_idx,
+            self._df = _make_pmf(self.qs_arr, self.ps_arr, self.bin_idx,
                 self.bin_edges, self._bin_stat)
+        return self._df
+
+
+class JointPmf():
+    """Two-dimensional Probability Mass Function (pmf) for discrete data."""
+
+    def __init__(self, qs1:np.ndarray, qs2:np.ndarray, bins1:int, bins2:int,
+                 ps1:np.ndarray=None, ps2:np.ndarray=None,
+                 bin_stat_fx:Callable=None, id1:np.ndarray=None,
+                 id2:np.ndarray=None) -> None:
+        """Initialize pmf properties."""
+
+        # Required args
+        self.pmf1 = Pmf(qs1, bins1, ps1, bin_stat_fx, id1)
+        self.pmf2 = Pmf(qs2, bins2, ps2, bin_stat_fx, id2)
+
+        # Formatting
+        self.prec = 2
+
+        # Optional
+        self._df = None
+
+
+    @property
+    def df(self):
+        if self._df is None:
+            _joint_mtx = _make_joint_pmf_mtx(
+                self.pmf1.qs, self.pmf2.qs, self.states1, self.states2)
+            # Make joint Pmf from joint matrix
+            _df = pd.DataFrame({"ps": _joint_mtx.reshape(_joint_mtx.size)})
+            _df.index = pd.MultiIndex.from_product(iterables=[self.states1, self.states2])
+            self._df = _df
+
         return self._df
 
 
@@ -83,9 +116,9 @@ def _seq2arr(seq:Sequence) -> np.ndarray:
     return seq
 
 
-def _make_pmf1(qs:np.ndarray, ps:np.ndarray, bin_idx:Sequence,
+def _make_pmf(qs:np.ndarray, ps:np.ndarray, bin_idx:Sequence,
                bin_edges:np.ndarray, bin_stat_fx:Callable) -> np.ndarray:
-    """Pmf1 object from empirical data."""
+    """Pmf object from empirical data."""
 
     N = np.sum(ps)  # total var dataset size
     bins = len(bin_idx)
@@ -102,6 +135,31 @@ def _make_pmf1(qs:np.ndarray, ps:np.ndarray, bin_idx:Sequence,
     bin_df.set_index("bins", inplace=True)
     return bin_df
 
+
+def _make_joint_pmf_mtx(qs1:np.ndarray, qs2:np.ndarray, states1:Sequence,
+                        states2:Sequence) -> np.ndarray:
+    """Joint pmf from empirical dataset."""
+
+    # Init vars
+    qs1_num, qs2_num = len(states1), len(states2)
+    pxy = np.zeros(shape=(qs1_num, qs2_num))
+
+    # # Outerproduct of states
+    states_arr = [(si, sj, states1[si], states2[sj])
+                  for si in states1 for sj in states2]
+
+    # Check if data1, data2 are in state and return
+    # TODO: Rewrite this as bin_edges check:
+    # i.e hi, lo = bin_edges[var1_state]; return lo <= var1 < hi
+    is_intersect_fx = lambda state1, state2, q1, q2: \
+        (q1 == state1) and (q2 == state2)
+
+    for si, sj, state1, state2 in states_arr:
+        for q1, q2 in zip(qs1, qs2):
+            is_intersect = is_intersect_fx(q1, q2, state1, state2)
+            pxy[si, sj] += 1 if is_intersect else 0
+
+    return pxy / np.sum(pxy)
 
 def make_bin_edges(vals:np.ndarray, bins:int, bin_range:Sequence[float]) -> np.ndarray:
     """Create bin_edges."""
