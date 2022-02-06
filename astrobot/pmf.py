@@ -1,15 +1,18 @@
 """Distributions from empirical datasets"""
 import numpy as np
 import pandas as pd
-from typing import Sequence, Callable
 from pprint import pprint
 from functools import reduce
+
+from typing import Sequence, Callable
+from dataclasses import dataclass
 
 
 def pp(x, *args):
     pprint(x) if not args else (pprint(x), pp(*args))
 
 
+@dataclass
 class Pmf(object):
     """One-dimensional Probability Mass Function (pmf) for discrete data."""
 
@@ -75,6 +78,7 @@ class Pmf(object):
         return self._df
 
 
+@dataclass
 class JointPmf():
     """Two-dimensional Probability Mass Function (pmf) for discrete data."""
 
@@ -201,6 +205,9 @@ def plt_hist(pmf, **kwargs):
     else:
         _, ax = plt.subplots(1,1)
 
-    ax.bar(pmf.df.qs, height=pmf.df.ps, **kwargs)
-
-    return ax
+    # TODO: should be sampled, use U(0, 1) => min(q), max(qs) and
+    # hashed to appropriarate pmf edge. Also switch to CDF?
+    data = [np.ones(int(p * 10000)) * q for p, q in zip(pmf.df.ps, pmf.df.qs)]
+    return pd.DataFrame(
+        {'qs': np.concatenate(data)}).hist(
+            bins=pmf.bins, ax=ax, density=True, **kwargs)
