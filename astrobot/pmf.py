@@ -3,13 +3,9 @@ import numpy as np
 import pandas as pd
 from pprint import pprint
 from functools import reduce
-
 from typing import Sequence, Callable
 from dataclasses import dataclass
-
-
-def pp(x, *args):
-    pprint(x) if not args else (pprint(x), pp(*args))
+def pp(x, *args): pprint(x) if not args else (pprint(x), pp(*args))
 
 
 @dataclass
@@ -82,31 +78,48 @@ class Pmf(object):
 class JointPmf():
     """Two-dimensional Probability Mass Function (pmf) for discrete data."""
 
-    def __init__(self, qs1:np.ndarray, qs2:np.ndarray, bins1:int, bins2:int,
-                 ps1:np.ndarray=None, ps2:np.ndarray=None,
-                 bin_stat_fx:Callable=None, id1:np.ndarray=None,
-                 id2:np.ndarray=None) -> None:
-        """Initialize pmf properties."""
+    def __init__(self, pmf1:Pmf, pmf2:Pmf, states1:np.ndarray,
+                 states2:np.ndarray) -> None:
+        """Initialize pmf properties.
+
+        When defining states1 and states 2, ensure missing bins
+                are represented, i.e. states1 = np.unique(qs_arr) may not work.
+
+        Args:
+            states1: All unique states in pmf1.
+            states2: All unique states in pmf2.
+        """
 
         # Required args
-        self.pmf1 = Pmf(qs1, bins1, ps1, bin_stat_fx, id1)
-        self.pmf2 = Pmf(qs2, bins2, ps2, bin_stat_fx, id2)
+        self.pmf1 = pmf1
+        self.pmf2 = pmf2
+        # TODO: make this based on bin_edges
+        self.states1 = states1
+        self.states2 = states2
 
         # Formatting
         self.prec = 2
 
         # Optional
+        self._jmtx = None
         self._df = None
 
 
     @property
+    def jmtx(self):
+        if self._jmtx is None:
+            self._jmtx = _make_joint_pmf_mtx(
+                self.pmf1.qs_arr, self.pmf2.qs_arr, self.states1, self.states2)
+        return self._jmtx
+
+    @property
     def df(self):
         if self._df is None:
-            _joint_mtx = _make_joint_pmf_mtx(
-                self.pmf1.qs, self.pmf2.qs, self.states1, self.states2)
+            jmtx = self.jmtx
             # Make joint Pmf from joint matrix
-            _df = pd.DataFrame({"ps": _joint_mtx.reshape(_joint_mtx.size)})
+            _df = pd.DataFrame({"ps": jmtx.reshape(jmtx.size)})
             _df.index = pd.MultiIndex.from_product(iterables=[self.states1, self.states2])
+            _df.index = _df.index.set_names(['q1', 'q2'])
             self._df = _df
 
         return self._df
@@ -149,8 +162,9 @@ def _make_joint_pmf_mtx(qs1:np.ndarray, qs2:np.ndarray, states1:Sequence,
     pxy = np.zeros(shape=(qs1_num, qs2_num))
 
     # # Outerproduct of states
-    states_arr = [(si, sj, states1[si], states2[sj])
-                  for si in states1 for sj in states2]
+    states_arr = [(si, sj, state1, state2)
+                  for si, state1 in enumerate(states1)
+                  for sj, state2 in enumerate(states2)]
 
     # Check if data1, data2 are in state and return
     # TODO: Rewrite this as bin_edges check:
@@ -198,16 +212,21 @@ def prec(pmf_df: pd.DataFrame, precision:int=2) -> pd.DataFrame:
 # TODO move this to viz
 import matplotlib.pyplot as plt
 
-def plt_hist(pmf, **kwargs):
+def plt_hist(pmf:Pmf, **kwargs) -> plt.Axes:
     """Plot histogram"""
-    if "ax" in kwargs:
-        ax = kwargs.pop("ax")
-    else:
-        _, ax = plt.subplots(1,1)
+
+    _pop_kwarg = lambda q: kwargs.pop(q) if q in kwargs else False
+    ax = key if (key := _pop_kwarg("ax")) else plt.subplots()[1]
+    edgecolor = x if (x := _pop_kwarg("edgecolor")) else 'black'
+    facecolor = x if (x := _pop_kwarg("facecolor")) else "lightgray"
+
 
     # TODO: should be sampled, use U(0, 1) => min(q), max(qs) and
     # hashed to appropriarate pmf edge. Also switch to CDF?
-    data = [np.ones(int(p * 10000)) * q for p, q in zip(pmf.df.ps, pmf.df.qs)]
+    data = [np.ones(int(p * 10000)) * q
+            for p, q in zip(pmf.df.ps, pmf.df.qs)]
+
     return pd.DataFrame(
         {'qs': np.concatenate(data)}).hist(
-            bins=pmf.bins, ax=ax, density=True, **kwargs)
+            bins=pmf.bins, ax=ax, density=True, edgecolor=edgecolor,
+            facecolor=facecolor, **kwargs)[0]

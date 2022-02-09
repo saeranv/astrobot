@@ -13,20 +13,6 @@ def _make_dataset():
          "ps": np.array([2., 1., 1., 2., 3.])})
 
 
-def _make_independent_joint_dataset():
-    """Coins (independent)."""
-    return pd.DataFrame(
-        {"qs1": [0, 1, 0, 1],
-         "qs2": [0, 1, 1, 0]})
-
-
-def _make_dependent_joint_dataset():
-    """Glued coins (dependant)."""
-    return pd.DataFrame(
-        {"qs1": [0, 1, 0, 1],
-         "qs2": [0, 1, 0, 1]})
-
-
 def test_make_pmf():
     """Test _make_pmf."""
 
@@ -115,13 +101,31 @@ def test_make_bin_idx():
 def test_make_joint_pmf():
     """Test joint pmf"""
 
-    # Get dataset
-    ind_dataset = _make_independent_joint_dataset()
-    dep_dataset = _make_dependent_joint_dataset()
-    states1 = np.unique(ind_dataset.qs1)
-    states2 = np.unique(ind_dataset.qs2)
+    # Test independent data
+    # Coins (independent).
+    ind_dataset = pd.DataFrame(
+        {"qs1": [0, 1, 0, 1],
+         "qs2": [0, 1, 1, 0]})
+    states1 = [0, 1]
+    states2 = [0, 1]
+
+    joint_mtx = pmf._make_joint_pmf_mtx(
+        pmf._seq2arr(ind_dataset.qs1), pmf._seq2arr(ind_dataset.qs2),
+        states1, states2)
+    test_joint_mtx = np.array(
+        [[.25, .25],
+         [.25, .25]])
+
+    assert np.allclose(joint_mtx, test_joint_mtx, atol=1e-5)
 
     # Test dependent data
+    # Glued coins (dependant).
+    dep_dataset = pd.DataFrame(
+        {"qs1": [0, 1, 0, 1],
+         "qs2": [0, 1, 0, 1]})
+    states1 = [0, 1]
+    states2 = [0, 1]
+
     joint_mtx = pmf._make_joint_pmf_mtx(
         pmf._seq2arr(dep_dataset.qs1), pmf._seq2arr(dep_dataset.qs2),
         states1, states2)
@@ -131,12 +135,22 @@ def test_make_joint_pmf():
 
     assert np.allclose(joint_mtx, test_joint_mtx, atol=1e-5)
 
-    # Test independent data
-    joint_mtx = pmf._make_joint_pmf_mtx(
-        pmf._seq2arr(ind_dataset.qs1), pmf._seq2arr(ind_dataset.qs2),
-        states1, states2)
-    test_joint_mtx = np.array(
-        [[.25, .25],
-         [.25, .25]])
+    # Test 3 bins
+    # q1 is on y-axis, q2 is on x-axis
+    jmtx_ = np.array(
+        # 1  2  3
+        [[1, 0, 1],  # 1
+         [0, 0, 1],  # 2
+         [0, 0, 1]]) # 3
+    jmtx_ = jmtx_ / np.sum(jmtx_)
 
-    assert np.allclose(joint_mtx, test_joint_mtx, atol=1e-5)
+    pmf1 = pmf.Pmf([1, 1, 2, 3], 3)
+    pmf2 = pmf.Pmf([1, 3, 3, 3], 3)
+    states = [1, 2, 3]
+    jmtx = pmf._make_joint_pmf_mtx(
+        pmf1.qs_arr, pmf2.qs_arr, states, states)
+
+    assert jmtx.shape[0] == 3
+    assert jmtx.shape[1] == 3
+    assert np.allclose(jmtx, jmtx_, 1e-10)
+
