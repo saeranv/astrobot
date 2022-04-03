@@ -49,7 +49,7 @@ class Pmf(object):
         dist.bin_idx: [[0], [1, 3], [2, 4]]
         """
         if self._bin_idx is None:
-            self._bin_idx = make_bin_idx(self.qs_arr, self.bin_edges)
+            self._bin_idx = bin_idx(self.qs_arr, self.bin_edges)
         return self._bin_idx
 
     @property
@@ -61,7 +61,7 @@ class Pmf(object):
         dist.bin_edges: [0, 1, 2, 3]
         """
         if self._bin_edges is None:
-            self._bin_edges = make_bin_edges(
+            self._bin_edges = bin_edges(
                 self.qs_arr, bins=self.bins,
                 bin_range=(self.qs_arr.min(), self.qs_arr.max()))
         return self._bin_edges
@@ -69,7 +69,7 @@ class Pmf(object):
     @property
     def df(self):
         if self._df is None:
-            self._df = _make_pmf(self.qs_arr, self.ps_arr, self.bin_idx,
+            self._df = _pmf(self.qs_arr, self.ps_arr, self.bin_idx,
                 self.bin_edges, self._bin_stat)
         return self._df
 
@@ -108,7 +108,7 @@ class JointPmf():
     @property
     def jmtx(self):
         if self._jmtx is None:
-            self._jmtx = _make_joint_pmf_mtx(
+            self._jmtx = _joint_pmf_mtx(
                 self.pmf1.qs_arr, self.pmf2.qs_arr, self.states1, self.states2)
         return self._jmtx
 
@@ -133,7 +133,7 @@ def _seq2arr(seq:Sequence) -> np.ndarray:
     return seq
 
 
-def _make_pmf(qs:np.ndarray, ps:np.ndarray, bin_idx:Sequence,
+def _pmf(qs:np.ndarray, ps:np.ndarray, bin_idx:Sequence,
                bin_edges:np.ndarray, bin_stat_fx:Callable) -> np.ndarray:
     """Pmf object from empirical data."""
 
@@ -153,7 +153,7 @@ def _make_pmf(qs:np.ndarray, ps:np.ndarray, bin_idx:Sequence,
     return bin_df
 
 
-def _make_joint_pmf_mtx(qs1:np.ndarray, qs2:np.ndarray, states1:Sequence,
+def _joint_pmf_mtx(qs1:np.ndarray, qs2:np.ndarray, states1:Sequence,
                         states2:Sequence) -> np.ndarray:
     """Joint pmf from empirical dataset."""
 
@@ -167,7 +167,8 @@ def _make_joint_pmf_mtx(qs1:np.ndarray, qs2:np.ndarray, states1:Sequence,
                   for sj, state2 in enumerate(states2)]
 
     # Check if data1, data2 are in state and return
-    # TODO: Rewrite this as bin_edges check:
+    # TODO: Move this as categorical_is_in_bin
+    # TODO: Add a continous_is_in_bin:
     # i.e hi, lo = bin_edges[var1_state]; return lo <= var1 < hi
     is_intersect_fx = lambda state1, state2, q1, q2: \
         (q1 == state1) and (q2 == state2)
@@ -179,7 +180,7 @@ def _make_joint_pmf_mtx(qs1:np.ndarray, qs2:np.ndarray, states1:Sequence,
 
     return pxy / np.sum(pxy)
 
-def make_bin_edges(vals:np.ndarray, bins:int, bin_range:Sequence[float]) -> np.ndarray:
+def bin_edges(vals:np.ndarray, bins:int, bin_range:Sequence[float]) -> np.ndarray:
     """Create bin_edges."""
     # Get bin_edges
     min_edge, max_edge = bin_range
@@ -187,7 +188,7 @@ def make_bin_edges(vals:np.ndarray, bins:int, bin_range:Sequence[float]) -> np.n
     return min_edge + np.array([bin_inc * i for i in range(bins + 1)])
 
 
-def make_bin_idx(qs:np.ndarray, bin_edges:np.ndarray, eps=1e-10) -> Sequence:
+def bin_idx(qs:np.ndarray, bin_edges:np.ndarray, eps=1e-10) -> Sequence:
     """Creates bin_idx, a list of arrays from qs. Arrays are of unequal length."""
 
     bins = len(bin_edges) - 1
@@ -230,3 +231,15 @@ def plt_hist(pmf:Pmf, **kwargs) -> plt.Axes:
         {'qs': np.concatenate(data)}).hist(
             bins=pmf.bins, ax=ax, density=True, edgecolor=edgecolor,
             facecolor=facecolor, **kwargs)[0]
+
+
+def plt_hist2(jpmf: JointPmf, fig_ax=None, **kwargs) -> plt.Axes:
+    """Plot 2d histogram for joint distributions."""
+
+    # _pop_kwarg = lambda q: kwargs.pop(q) if q in kwargs else False
+    fig, ax = plt.subplots() if fig_ax is None else fig_ax
+
+    im = ax.imshow(jpmf.jmtx, cmap='gray_r', vmin=0, vmax=1)
+    fig.colorbar(im);
+
+    return ax
