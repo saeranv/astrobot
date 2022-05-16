@@ -18,8 +18,9 @@ def osm_url(bld_id, zero_pad=7):
 
 def comstock_df(drop_na=True):
     """Get comstock metadata as dataframe."""
-    metacom_fpath = os.path.join(RESCOMSTOCK_DIR, "comstock", "metadata_comstock.tsv")
-    comdf = pd.read_csv(metacom_fpath, sep='\t')
+    metacom_fpath = os.path.join(
+        RESCOMSTOCK_DIR, "comstock", "metadata_comstock.parquet")
+    comdf = pd.read_parquet(metacom_fpath)
     if drop_na:
         comdf = comdf.dropna(axis=0, how="any")
     return comdf
