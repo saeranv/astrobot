@@ -1,0 +1,12 @@
+{
+  "FromHoneybeeSimulationParameter": {
+    "simulation_parameter_json": "C:\\Users\\admin\\master\\astrobot\\experiments\\lb_models_simple\\ShoeBox0.4\\openstudio\\simulation_parameter.json",
+    "applicable": true
+  },
+  "FromHoneybeeModel": {
+    "model_json": "C:\\Users\\admin\\master\\astrobot\\experiments\\lb_models_simple\\ShoeBox0.4\\openstudio\\ShoeBox0.4.hbjson",
+    "schedule_csv_dir": "C:\\Users\\admin\\master\\astrobot\\experiments\\lb_models_simple\\ShoeBox0.4\\openstudio\\schedules",
+    "include_datetimes": false,
+    "applicable": true
+  }
+}

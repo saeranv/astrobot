@@ -1,0 +1,2 @@
+C:
+"C:\openstudio-3.3.0\bin\openstudio.exe" -I "C:\Users\admin\ladybug_tools\resources\measures\honeybee_openstudio_gem\lib" run -m -w "C:\Users\admin\master\astrobot\experiments\lb_models_simple\ShoeBox0.4\openstudio\workflow.osw"

@@ -1,0 +1,24 @@
+{
+    "weather_file": "C:\\Users\\admin\\ladybug_tools\\resources\\weather\\USA_MA_Boston-Logan.Intl.AP.725090_TMY3\\USA_MA_Boston-Logan.Intl.AP.725090_TMY3.epw", 
+    "measure_paths": [
+        "C:\\Users\\admin\\ladybug_tools\\resources\\measures\\honeybee_openstudio_gem\\lib\\measures"
+    ], 
+    "steps": [
+        {
+            "arguments": {
+                "simulation_parameter_json": "C:\\Users\\admin\\master\\astrobot\\experiments\\lb_models_simple\\ShoeBox0.4\\openstudio\\simulation_parameter.json"
+            }, 
+            "measure_dir_name": "from_honeybee_simulation_parameter"
+        }, 
+        {
+            "arguments": {
+                "model_json": "C:\\Users\\admin\\master\\astrobot\\experiments\\lb_models_simple\\ShoeBox0.4\\openstudio\\ShoeBox0.4.hbjson", 
+                "schedule_csv_dir": "C:\\Users\\admin\\master\\astrobot\\experiments\\lb_models_simple\\ShoeBox0.4\\openstudio\\schedules"
+            }, 
+            "measure_dir_name": "from_honeybee_model"
+        }
+    ], 
+    "file_paths": [
+        "C:\\Users\\admin\\master\\astrobot\\experiments\\lb_models_simple\\ShoeBox0.4\\openstudio\\schedules"
+    ]
+}
